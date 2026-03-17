@@ -5,7 +5,7 @@ import { useRef } from "react"
 import { ExternalLink, Github } from "lucide-react"
 
 
-export function ProjectsSection({projects} : { projects: { title: string, description: string, tech: string[], repo: string, live: string }[] }) {
+export function ProjectsSection({ projects }: { projects: { title: string, description: string, tech: string[], repo: string, live: string }[] }) {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -15,13 +15,13 @@ export function ProjectsSection({projects} : { projects: { title: string, descri
   const y = useTransform(scrollYProgress, [0, 1], [50, -50])
 
   return (
-    <section 
+    <section
       ref={ref}
-      id="projects" 
+      id="projects"
       className="relative py-32 px-6 overflow-hidden"
     >
       {/* Parallax Background */}
-      <motion.div 
+      <motion.div
         style={{ y }}
         className="absolute inset-0 -z-10"
       >
@@ -66,6 +66,10 @@ export function ProjectsSection({projects} : { projects: { title: string, descri
                   {/* Project Image Placeholder */}
                   <div className="lg:col-span-2 aspect-video lg:aspect-square rounded-xl bg-secondary border border-border overflow-hidden relative">
 
+                    {/* Background layer */}
+                    <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
+
+                    {/* Image / Video layer */}
                     {previews.map((p, i) => (
                       p.type === "gif" ? (
                         <video
@@ -75,20 +79,21 @@ export function ProjectsSection({projects} : { projects: { title: string, descri
                           loop
                           muted
                           playsInline
-                          className="absolute inset-0 w-full h-full object-cover"
+                          className="absolute inset-0 w-full h-full object-contain z-10"
                           onError={(e) => { (e.currentTarget.style.display = "none") }}
                         />
                       ) : (
                         <img
                           key={i}
                           src={p.src}
-                          className="absolute inset-0 w-full h-full object-cover"
+                          className="absolute inset-0 w-full h-full object-contain z-10"
                           onError={(e) => { (e.currentTarget.style.display = "none") }}
                         />
                       )
                     ))}
 
-                    <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-primary/10 via-transparent to-transparent">
+                    {/* Fallback index */}
+                    <div className="absolute inset-0 flex items-center justify-center z-0">
                       <span className="text-4xl font-bold text-primary/20">
                         {String(index + 1).padStart(2, '0')}
                       </span>
@@ -104,11 +109,11 @@ export function ProjectsSection({projects} : { projects: { title: string, descri
                     <p className="text-muted-foreground mb-6 leading-relaxed">
                       {project.description}
                     </p>
-                    
+
                     {/* Tech Stack */}
                     <div className="flex flex-wrap gap-2 mb-6">
                       {project.tech.map((tech) => (
-                        <span 
+                        <span
                           key={tech}
                           className="px-3 py-1 text-xs font-mono bg-secondary text-muted-foreground rounded-full border border-border"
                         >
@@ -119,7 +124,7 @@ export function ProjectsSection({projects} : { projects: { title: string, descri
 
                     {/* Links */}
                     <div className="flex items-center gap-4">
-                      <a 
+                      <a
                         href={`https://github.com/${project.repo}`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -128,7 +133,7 @@ export function ProjectsSection({projects} : { projects: { title: string, descri
                         <Github className="w-4 h-4" />
                         <span>Code</span>
                       </a>
-                      <a 
+                      <a
                         href={project.live}
                         target="_blank"
                         rel="noopener noreferrer"
